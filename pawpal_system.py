@@ -50,6 +50,7 @@ class Owner:
 
     def add_pet(self, pet: Pet):
         """Add a pet to this owner's collection."""
+
         self.pets.append(pet)
 
     def remove_pet(self, name: str):
@@ -63,7 +64,9 @@ class Owner:
 
     def get_all_tasks(self) -> list[Task]:
         """Return a flattened list of all tasks assigned to the owner's pets."""
+
         all_tasks: list[Task] = []
+
         for pet in self.pets:
             all_tasks.extend(pet.tasks)
         return all_tasks
@@ -78,7 +81,9 @@ class Scheduler:
         Convert 'HH:MM' (24-hour) to minutes after midnight.
         Raises ValueError for invalid format/range.
         """
+
         parts = time_str.strip().split(":")
+
         if len(parts) != 2:
             raise ValueError(f"Invalid time format: {time_str}")
 
@@ -96,6 +101,7 @@ class Scheduler:
 
     def sort_by_time(self) -> list[Task]:
         """Return all tasks sorted by valid start time, with invalid times placed last."""
+
         tasks = self.get_all_tasks()
 
         # Valid times first, invalid times last (stable ordering within each group)
@@ -116,6 +122,7 @@ class Scheduler:
         Detect overlapping tasks across all pets.
         Conflict if startA < endB and startB < endA.
         """
+
         conflicts: list[str] = []
 
         # Build list with parsed times; skip invalid-time tasks
@@ -156,6 +163,7 @@ class Scheduler:
         - Daily tasks reset to incomplete after completion.
         - Weekly/monthly tasks are left as-is (could be date-driven in a fuller version).
         """
+
         for task in self.get_all_tasks():
             if task.frequency.lower() == "daily" and task.completed:
                 task.completed = False
