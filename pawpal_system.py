@@ -11,6 +11,7 @@ class Task:
     completed: bool = False
 
     def mark_complete(self):
+        """Mark this task as completed."""
         self.completed = True
 
 
@@ -21,10 +22,12 @@ class Pet:
     tasks: list["Task"] = field(default_factory=list)
 
     def add_task(self, task: Task):
+        """Add a task to this pet's task list."""
         self.tasks.append(task)
 
     def remove_task(self, name: str):
-        # Remove first matching task by name
+        """Remove the first task with the matching name and return whether one was removed."""
+
         for i, task in enumerate(self.tasks):
             if task.name == name:
                 del self.tasks[i]
@@ -33,15 +36,25 @@ class Pet:
 
 
 class Owner:
+    """
+    Represents an owner of pets with associated functionalities.
+
+    The Owner class is used to manage pets and tasks associated with them. An instance
+    of Owner holds a collection of pets and provides methods to add new pets, remove
+    them by name, and retrieve all tasks assigned to those pets.
+    """
+
     def __init__(self, name: str):
         self.name = name
         self.pets: list[Pet] = []
 
     def add_pet(self, pet: Pet):
+        """Add a pet to this owner's collection."""
         self.pets.append(pet)
 
     def remove_pet(self, name: str):
-        # Remove first matching pet by name
+        """Remove the first pet with the matching name and return whether one was removed."""
+
         for i, pet in enumerate(self.pets):
             if pet.name == name:
                 del self.pets[i]
@@ -49,6 +62,7 @@ class Owner:
         return False
 
     def get_all_tasks(self) -> list[Task]:
+        """Return a flattened list of all tasks assigned to the owner's pets."""
         all_tasks: list[Task] = []
         for pet in self.pets:
             all_tasks.extend(pet.tasks)
@@ -81,6 +95,7 @@ class Scheduler:
         return self.owner.get_all_tasks()
 
     def sort_by_time(self) -> list[Task]:
+        """Return all tasks sorted by valid start time, with invalid times placed last."""
         tasks = self.get_all_tasks()
 
         # Valid times first, invalid times last (stable ordering within each group)
@@ -93,6 +108,7 @@ class Scheduler:
         return sorted(tasks, key=sort_key)
 
     def filter_by_status(self, completed: bool) -> list[Task]:
+        """Return all tasks whose completion status matches the requested value."""
         return [task for task in self.get_all_tasks() if task.completed == completed]
 
     def detect_conflicts(self) -> list[str]:
@@ -134,7 +150,8 @@ class Scheduler:
         return conflicts
 
     def handle_recurring_tasks(self):
-        """
+        """Reset completed daily tasks to incomplete while leaving other recurring tasks unchanged.
+
         Basic recurring behavior:
         - Daily tasks reset to incomplete after completion.
         - Weekly/monthly tasks are left as-is (could be date-driven in a fuller version).
@@ -142,4 +159,3 @@ class Scheduler:
         for task in self.get_all_tasks():
             if task.frequency.lower() == "daily" and task.completed:
                 task.completed = False
-                
