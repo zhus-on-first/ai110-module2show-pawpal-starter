@@ -47,3 +47,25 @@ else:
 pending   = scheduler.filter_by_status(completed=False)
 completed = scheduler.filter_by_status(completed=True)
 print(f"\nSummary: {len(pending)} pending, {len(completed)} completed out of {len(sorted_tasks)} total tasks.")
+
+# --- Recurring Tasks Demo ---
+print("\n--- Recurring Tasks Demo ---")
+
+# Mark a daily task complete to trigger recurrence
+morning_walk = buddy.tasks[2]  # Morning Walk (daily)
+morning_walk.mark_complete()
+print(f"Marked '{morning_walk.name}' as complete.")
+
+before_count = len(buddy.tasks)
+scheduler.handle_recurring_tasks()
+after_count = len(buddy.tasks)
+
+print(f"Tasks for Buddy before: {before_count}, after: {after_count}")
+print("New tasks added for next occurrence:")
+for task in buddy.tasks[before_count:]:
+    print(f"  + {task.name} (completed={task.completed})")
+
+# Pending vs completed summary
+pending   = scheduler.filter_by_status(completed=False)
+completed = scheduler.filter_by_status(completed=True)
+print(f"\nSummary: {len(pending)} pending, {len(completed)} completed out of {len(sorted_tasks)} total tasks.")
