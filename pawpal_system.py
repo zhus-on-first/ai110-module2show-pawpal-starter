@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import date, timedelta
 
 
 @dataclass
@@ -162,13 +163,36 @@ class Scheduler:
 
     def handle_recurring_tasks(self):
         """
-        Reset completed daily tasks to incomplete while leaving other recurring tasks unchanged.
-
-        Basic recurring behavior:
-        - Daily tasks reset to incomplete after completion.
-        - Weekly/monthly tasks are left as-is (could be date-driven in a fuller version).
+        When a recurring task is marked complete, create a new instance
+        for the next occurrence and add it to the same pet's task list.
+        - Daily: next occurrence is tomorrow
+        - Weekly: next occurrence is 7 days from now
+        - Monthly tasks are left as-is
         """
+        today = date.today()
 
-        for task in self.get_all_tasks():
-            if task.frequency.lower() == "daily" and task.completed:
-                task.completed = False
+        for pet in self.owner.pets:
+            new_tasks = []
+            for task in pet.tasks:
+                if not task.completed:
+                    continue
+                freq = task.frequency.lower()
+                if freq == "daily":
+                    next_date = today + timedelta(days=1)
+                elif freq == "weekly":
+                    next_date = today + timedelta(weeks=1)
+                else:
+                    continue
+
+                new_task = Task(
+                    name=task.name,
+                    time=task.time,
+                    duration=task.duration,
+                    frequency=task.frequency,
+                    priority=task.priority,
+                    completed=False,
+                )
+                new_tasks.append(new_task)
+
+            for new_task in new_tasks:
+                pet.add_task(new_task)
