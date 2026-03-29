@@ -6,7 +6,7 @@ def test_mark_complete_changes_status():
     assert not task.completed
 
     task.mark_complete()
-    assert task.completed == True
+    assert task.completed
 
 
 def test_add_task_increases_count():
