@@ -13,15 +13,9 @@ The three core actions a user can take in the app are:
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
-Here's a complete draft for section 1a you can paste in:
-
----
-
-Four classes were designed for the PawPal+ app:
-
 1. `Owner`: Represents the pet owner. Responsible for managing the collection of pets.
 
-    Attributes: 
+    Attributes:
     - `name: str`
     - `pets: list[Pet]`
 
@@ -32,7 +26,7 @@ Four classes were designed for the PawPal+ app:
 
 2. `Pet`: Represents a pet belonging to an owner. Stores pet details and its associated care tasks.
 
-    Attributes: 
+    Attributes:
     - `name: str`
     - `species: str`
     - `tasks: list[Task]`
@@ -43,7 +37,7 @@ Four classes were designed for the PawPal+ app:
 
 3. `Task`: Represents a single care activity. Uses a dataclass for clean attribute management.
 
-    Attributes: 
+    Attributes:
     - `name: str`
     - `time: str`
     - `duration: int`
@@ -57,7 +51,7 @@ Four classes were designed for the PawPal+ app:
 
     Attributes: `owner: Owner`
 
-    Methods: 
+    Methods:
     - `get_all_tasks() -> list[Task]`
     - `sort_by_time() -> list[Task]`
     - `filter_by_status(completed: bool) -> list[Task]`
