@@ -47,7 +47,8 @@ class Scheduler:
         self.owner = owner
 
     def get_all_tasks(self) -> list[Task]:
-        pass
+        # Delegate to Owner to avoid duplicating aggregation logic
+        return self.owner.get_all_tasks()
 
     def sort_by_time(self) -> list[Task]:
         pass

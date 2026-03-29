@@ -62,6 +62,14 @@ The three core actions a user can take in the app are:
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
+
+No structural changes were made to the UML, but the following risks and tradeoffs were identified during skeleton review and will be addressed during implementation:
+
+- **`Scheduler.get_all_tasks()` delegates to `Owner.get_all_tasks()`** to avoid duplicating aggregation logic and prevent drift between the two methods.
+- **No unique IDs for `Pet` or `Task`**: Name-based lookup (`remove_pet(name)`, `remove_task(name)`) assumes unique names. Duplicate names may cause ambiguous deletes. Acceptable tradeoff for this project's scope.
+- **No format validation on `time`, `frequency`, or `priority`**: These are free-form strings. Downstream sorting and filtering logic will assume a consistent format (e.g., `"HH:MM"` for time, `"daily"`/`"weekly"` for frequency).
+- **Conflict detection and recurring task logic** carry known complexity risks (O(n²) and mutation-while-iterating respectively) — to be addressed carefully in Phase 4.
+
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
