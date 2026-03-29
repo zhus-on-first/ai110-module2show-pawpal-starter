@@ -1,4 +1,4 @@
-from pawpal_system import Owner, Pet, Task, Scheduler
+from pawpal_system import Owner, Pet, Scheduler, Task
 
 # Set up owner
 owner = Owner("Alex")
@@ -7,15 +7,16 @@ owner = Owner("Alex")
 buddy = Pet(name="Buddy", species="Dog")
 whiskers = Pet(name="Whiskers", species="Cat")
 
-# Add tasks to Buddy
-buddy.add_task(Task(name="Morning Walk",    time="07:00", duration=30, frequency="daily",   priority="high"))
+# Add tasks OUT OF ORDER to demonstrate sorting
 buddy.add_task(Task(name="Evening Walk",    time="18:00", duration=30, frequency="daily",   priority="high"))
 buddy.add_task(Task(name="Flea Medication", time="09:00", duration=5,  frequency="monthly", priority="medium"))
+buddy.add_task(Task(name="Morning Walk",    time="07:00", duration=30, frequency="daily",   priority="high"))
 
-# Add tasks to Whiskers
-whiskers.add_task(Task(name="Breakfast",       time="08:00", duration=10, frequency="daily",  priority="high"))
+# Add tasks to Whiskers — including a conflict with Buddy's Flea Medication (09:00)
 whiskers.add_task(Task(name="Vet Appointment", time="14:30", duration=60, frequency="weekly", priority="high"))
-whiskers.add_task(Task(name="Playtime",        time="19:00", duration=20, frequency="daily",  priority="low"))
+whiskers.add_task(Task(name="Breakfast",        time="08:00", duration=10, frequency="daily",  priority="high"))
+whiskers.add_task(Task(name="Playtime",         time="19:00", duration=20, frequency="daily",  priority="low"))
+whiskers.add_task(Task(name="Morning Grooming", time="09:00", duration=15, frequency="daily",  priority="medium"))
 
 # Register pets with owner
 owner.add_pet(buddy)
