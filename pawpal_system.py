@@ -32,6 +32,7 @@ class Pet:
             if task.name == name:
                 del self.tasks[i]
                 return True
+
         return False
 
 
@@ -60,6 +61,7 @@ class Owner:
             if pet.name == name:
                 del self.pets[i]
                 return True
+
         return False
 
     def get_all_tasks(self) -> list[Task]:
@@ -69,6 +71,7 @@ class Owner:
 
         for pet in self.pets:
             all_tasks.extend(pet.tasks)
+
         return all_tasks
 
 
@@ -127,6 +130,7 @@ class Scheduler:
 
         # Build list with parsed times; skip invalid-time tasks
         timed_tasks: list[tuple[Task, int, int]] = []
+
         for task in self.get_all_tasks():
             try:
                 start = self._time_to_minutes(task.time)
@@ -157,7 +161,8 @@ class Scheduler:
         return conflicts
 
     def handle_recurring_tasks(self):
-        """Reset completed daily tasks to incomplete while leaving other recurring tasks unchanged.
+        """
+        Reset completed daily tasks to incomplete while leaving other recurring tasks unchanged.
 
         Basic recurring behavior:
         - Daily tasks reset to incomplete after completion.
