@@ -2,16 +2,72 @@
 
 ## 1. System Design
 
+The three core actions a user can take in the app are:
+
+- Entering owner and pet information
+- Adding/editing care tasks with durations and priorities
+- Viewing and managing a prioritized daily care schedule based on the entered information and tasks
+
 **a. Initial design**
 
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
+Here's a complete draft for section 1a you can paste in:
+
+---
+
+Four classes were designed for the PawPal+ app:
+
+1. `Owner`: Represents the pet owner. Responsible for managing the collection of pets.
+
+    Attributes: 
+    - `name: str`
+    - `pets: list[Pet]`
+
+    Methods:
+    - `add_pet(pet: Pet)`
+    - `remove_pet(name: str)`
+    - `get_all_tasks() -> list[Task]`
+
+2. `Pet`: Represents a pet belonging to an owner. Stores pet details and its associated care tasks.
+
+    Attributes: 
+    - `name: str`
+    - `species: str`
+    - `tasks: list[Task]`
+
+    Methods:
+    - `add_task(task: Task)`
+    - `remove_task(name: str)`
+
+3. `Task`: Represents a single care activity. Uses a dataclass for clean attribute management.
+
+    Attributes: 
+    - `name: str`
+    - `time: str`
+    - `duration: int`
+    - `frequency: str`
+    - `priority: str`
+    - `completed: bool`
+
+    Methods: `mark_complete()`
+
+4. `Scheduler`: The system's brain. Retrieves tasks across all pets and applies algorithmic logic to organize them.
+
+    Attributes: `owner: Owner`
+
+    Methods: 
+    - `get_all_tasks() -> list[Task]`
+    - `sort_by_time() -> list[Task]`
+    - `filter_by_status(completed: bool) -> list[Task]`
+    - `detect_conflicts() -> list[str]`
+    - `handle_recurring_tasks()`
+
 **b. Design changes**
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
-
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
