@@ -130,10 +130,29 @@ Sure, testing in main and QAing the product helps, but that's not deep enough.
 - What behaviors did you test?
 - Why were these tests important?
 
+Testing is always important to verify not just behavior but also assumptions.
+`main.py` is a good smoke test — it shows the system working end to end — but
+unit tests are more precise. They isolate each behavior independently, so when
+something breaks you know exactly which method failed and why, rather than having
+to trace through the whole system to find the source.
+
+There are 10 tests. These tests matter because they verify the foundation the entire app depends on.
+A bug in `mark_complete()` or `sort_by_time()` would silently break the schedule  display and conflict detection.
+
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
 - What edge cases would you test next if you had more time?
+
+Moderately confident in happy path behavior — all ten tests pass. Edge cases not
+yet covered include: two pets with the same name, tasks with malformed time strings
+passed to `sort_by_time()`, an owner with no pets, and recurring task behavior when
+a mix of completed and incomplete tasks exist for the same pet. A filter test for
+completed tasks (not just pending) would also add confidence.
+
+All tests are unit tests. There are no automated integration tests — `main.py`
+serves as a manual integration check, verifying that the full Owner → Pet → Task →
+Scheduler chain works end to end in the terminal.
 
 ---
 
