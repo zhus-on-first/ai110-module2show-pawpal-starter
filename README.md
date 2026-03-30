@@ -1,43 +1,90 @@
-# PawPal+ (Module 2 Project)
+# PawPal+ 🐾
 
-You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
+A smart pet care management system that helps owners track daily routines —
+feedings, walks, medications, and appointments — while using algorithmic logic
+to organize and prioritize tasks.
 
-## Scenario
+## Demo
 
-A busy pet owner needs help staying consistent with pet care. They want an assistant that can:
+<img src="demo.png" alt="PawPal+ Screenshot" width="500">
 
-- Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
-- Consider constraints (time available, priority, owner preferences)
-- Produce a daily plan and explain why it chose that plan
+## Features
 
-Your job is to design the system first (UML), then implement the logic in Python, then connect it to the Streamlit UI.
+- **Add multiple pets** with name and species
+- **Schedule tasks** with time, duration, frequency, and priority
+- **Sorted daily schedule** — tasks displayed in chronological order regardless
+  of entry order
+- **Conflict detection** — warns when two tasks overlap in time
+- **Recurring task management** — completing a daily or weekly task automatically
+  creates the next occurrence
+- **Mark tasks complete** directly in the UI
+- **Priority color coding** — 🔴 high, 🟡 medium, 🟢 low
 
-## What you will build
+## System Architecture
 
-Your final app should:
+Four classes make up the logic layer (`pawpal_system.py`):
 
-- Let a user enter basic owner + pet info
-- Let a user add/edit tasks (duration + priority at minimum)
-- Generate a daily schedule/plan based on constraints and priorities
-- Display the plan clearly (and ideally explain the reasoning)
-- Include tests for the most important scheduling behaviors
+- `Owner` — manages a collection of pets
+- `Pet` — stores pet details and its associated tasks
+- `Task` — represents a single care activity (dataclass)
+- `Scheduler` — the brain; retrieves, sorts, filters, and manages tasks across
+  all pets
 
-## Getting started
+See `uml.md` for the full Mermaid.js class diagram.
 
-### Setup
+## Project Structure
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+```
+pawpal_system.py   # logic layer — all backend classes
+app.py             # Streamlit UI
+main.py            # CLI demo script for verifying backend logic
+tests/
+    test_pawpal.py # automated pytest suite
+reflection.md      # design decisions and AI collaboration notes
+uml.md             # Mermaid.js UML class diagram
 ```
 
-### Suggested workflow
+## Running the App
 
-1. Read the scenario carefully and identify requirements and edge cases.
-2. Draft a UML diagram (classes, attributes, methods, relationships).
-3. Convert UML into Python class stubs (no logic yet).
-4. Implement scheduling logic in small increments.
-5. Add tests to verify key behaviors.
-6. Connect your logic to the Streamlit UI in `app.py`.
-7. Refine UML so it matches what you actually built.
+```bash
+uv run streamlit run app.py
+```
+
+## Running the CLI Demo
+
+```bash
+uv run python main.py
+```
+
+## Testing PawPal+
+
+```bash
+uv run pytest
+```
+
+The test suite covers:
+
+- Task completion status change
+- Task addition and removal from pets
+- Edge case: pet with no tasks
+- Sorting correctness (chronological order)
+- Filtering by completion status
+- Conflict detection (overlap and no-overlap)
+- Recurring task creation (daily creates new instance, monthly does not)
+
+**Confidence level: ⭐⭐⭐⭐** — all happy paths and key edge cases pass.
+Integration tests and input validation are not yet covered.
+
+## Smarter Scheduling
+
+The `Scheduler` class implements the following algorithms:
+
+- **Sort by time** — uses a `_time_to_minutes()` helper to parse `HH:MM` strings
+  into integers, avoiding lexical sort bugs. Invalid times are placed last.
+- **Conflict detection** — uses a sweep-line approach: tasks are sorted by start
+  time, then each task is compared only against subsequent tasks that could
+  overlap, keeping complexity close to O(n log n) for typical schedules.
+- **Recurring tasks** — completing a daily or weekly task creates a new `Task`
+  instance for the next occurrence rather than resetting the existing one.
+  Mutation-while-iterating is avoided by collecting new tasks in a separate list
+  before appending.
