@@ -79,10 +79,16 @@ No structural changes were made to the UML, but the following risks and tradeoff
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
 
+The primary constraint is time. I also included duration, frequency, and priority.
+
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
+
+The scheduler does not consider travel time between locations or task durations that might extend beyond their original schedules.
+
+In other words, conflict detection only looks at direct inputted times and if there's overlap.
 
 ---
 
@@ -93,10 +99,27 @@ No structural changes were made to the UML, but the following risks and tradeoff
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
 - What kinds of prompts or questions were most helpful?
 
+LLM was used throughout — for brainstorming class responsibilities, drafting the UML,
+generating the class skeleton, and reviewing potential logic bottlenecks before
+implementation. The most useful prompts were specific and structural, such as asking
+about risks in a particular design pattern or syntax.
+
+I explored the settings for LLM/agent/MCP integration in VS Code. I also compared to Pycharm. I explored these settings. Changed some to see what would happen. I looked at some the feature's documentation, but honestly VS Code's documentation is not as good as it should be. Probably because the features are changing so fast.
+
+Both Pycharm and Vs Code's settings page is a hot mess. There is so much, but Pycharm is better organized for my brain.
+
+There are things I like about both. One thing is for certain. The integration and development is fast.
+
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
 - How did you evaluate or verify what the AI suggested?
+
+The LLM did not always suggest the best code. There were some surprisingly not Pythonic suggestions - simple ones. Overall, the suggestions kept the context really well as well as my style.
+
+I can understand now why reviewing LLM generated code can be overwhelming. I cannot just take it for granted. I have to make sure it passes human judgement. Plus, I am responsible for the overall performance. I need to process and maintain understanding of what is being implemented. I see challenges to just unleashing agents and all that brute computer to large programming tasks. When LLM ceases to be a partner and I just become a reviewer, I will never compete and I will lose control of the project.
+
+Sure, testing in main and QAing the product helps, but that's not deep enough.
 
 ---
 
@@ -120,10 +143,20 @@ No structural changes were made to the UML, but the following risks and tradeoff
 
 - What part of this project are you most satisfied with?
 
+The separation of concerns between `pawpal_system.py`, `app.py`, and `main.py`
+worked well. Having a CLI demo script made it easy to verify logic independently
+before connecting it to Streamlit.
+
+I enjoyed experimenting with LLM. I pushed myself not to worry too much that it generated code that would take me longer to write myself. I focused on experimenting with the tool and what I felt and learned in the process. I focused on how I want to learn and use the tool. I realize I have no desire to let it program for me and for me to be a reviewer of last resort.
+
 **b. What you would improve**
 
 - If you had another iteration, what would you improve or redesign?
 
+There are many more dynamic and complex algorithms and setups. Immediate ones are: Add unique IDs to `Pet` and `Task` to avoid ambiguous name-based deletes. Also add input validation on `time` and `frequency` fields so the system fails gracefully on bad input rather than silently skipping tasks.
+
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+
+The tool is changing fast. There's still much for developers to do to harness its power. The "harnesses" and tooling around it all is developing. No doubt it will change software development and engineering. The same forces of not enough time, money, and other resources still exist. Though it's clear that simple to "just do it with AI" is a dumb thing to wield. But it's not new. It's unmitigated stress.
